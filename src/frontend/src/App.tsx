@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, ClipboardList, LogOut } from 'lucide-react';
+import { LayoutDashboard, ClipboardList } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import Complaints from './pages/Complaints';
 import ComplaintDetail from './pages/ComplaintDetail';
@@ -26,7 +26,6 @@ const App: React.FC = () => {
           <div className="app-nav-links">
             <Link to="/mcc"><LayoutDashboard className="w-4 h-4" />Dashboard</Link>
             <Link to="/complaints"><ClipboardList className="w-4 h-4" />Complaints</Link>
-            <Link to="/"><LogOut className="w-4 h-4" />Exit</Link>
           </div>
         </div>
       </nav>}
