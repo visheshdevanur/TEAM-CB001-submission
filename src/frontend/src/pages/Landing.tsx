@@ -33,7 +33,7 @@ const Landing: React.FC = () => (
         <div id="login" className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link to="/access/public" className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-500 px-5 py-3 font-bold shadow-lg shadow-blue-500/25 transition hover:-translate-y-1 hover:bg-blue-400"><Users className="h-4 w-4" /> Public login or sign up <ArrowRight className="h-4 w-4" /></Link>
           <Link to="/access/worker" className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-300/30 bg-white/5 px-5 py-3 font-semibold text-slate-100 transition hover:-translate-y-1 hover:border-cyan-300/70 hover:bg-blue-400/10"><Wrench className="h-4 w-4" /> Worker login</Link>
-          <Link to="/access/admin" className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-300/30 bg-white/5 px-5 py-3 font-semibold text-slate-100 transition hover:-translate-y-1 hover:border-cyan-300/70 hover:bg-blue-400/10"><ShieldCheck className="h-4 w-4" /> Administrator</Link>
+          <Link to="/access/admin" className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-300/30 bg-white/5 px-5 py-3 font-semibold text-slate-100 transition hover:-translate-y-1 hover:border-cyan-300/70 hover:bg-blue-400/10 sm:w-[386px]"><ShieldCheck className="h-4 w-4" /> Administrator</Link>
         </div>
       </div>
 
