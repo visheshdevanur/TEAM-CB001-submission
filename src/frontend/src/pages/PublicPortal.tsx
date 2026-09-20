@@ -9,7 +9,7 @@ const PublicPortal: React.FC = () => {
   const [locationStatus, setLocationStatus] = useState('Click the map to choose the exact complaint location, or use your device location.');
   const [form, setForm] = useState({ issue_type: 'garbage_accumulation', description: '', address: '', latitude: 12.3051, longitude: 76.6551 });
   const navigate = useNavigate();
-  const load = async () => { try { setItems((await complaintApi.mine()).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())); } catch { navigate('/access/public'); } };
+  const load = async () => { try { setItems((await complaintApi.mine()).sort((a: Complaint, b: Complaint) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())); } catch { navigate('/access/public'); } };
   useEffect(() => { void load(); }, []);
   const useDeviceLocation = () => {
     if (!navigator.geolocation) return setLocationStatus('This browser does not provide device location. Select the point on the map instead.');

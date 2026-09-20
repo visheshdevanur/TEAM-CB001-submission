@@ -6,7 +6,7 @@ import { Complaint } from '../types/complaint';
 const WorkerPortal: React.FC = () => {
   const [items, setItems] = useState<Complaint[]>([]); const [area, setArea] = useState<any>(null); const [files, setFiles] = useState<Record<number, File | null>>({}); const [busy, setBusy] = useState<number | null>(null);
   const navigate = useNavigate();
-  const load = async () => { try { const [inbox, allotted] = await Promise.all([complaintApi.workerInbox(), areaApi.mine()]); setItems(inbox.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())); setArea(allotted); } catch { navigate('/access/worker'); } };
+  const load = async () => { try { const [inbox, allotted] = await Promise.all([complaintApi.workerInbox(), areaApi.mine()]); setItems(inbox.sort((a: Complaint, b: Complaint) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())); setArea(allotted); } catch { navigate('/access/worker'); } };
   useEffect(() => { void load(); }, []);
   const upload = async (item: Complaint) => { const file = files[item.id]; if (!file) return; setBusy(item.id); try { await complaintApi.uploadEvidence(item.id, file, { type:'AFTER', timestamp:new Date().toISOString(), latitude:item.latitude, longitude:item.longitude }); alert('After photo submitted. AI analysis will run automatically.'); await load(); } catch (error:any) { alert(error.response?.data?.detail || 'Upload failed'); } finally { setBusy(null); } };
   const acknowledge = async (item: Complaint) => { setBusy(item.id); try { await complaintApi.acknowledge(item.id); await load(); } catch (error:any) { alert(error.response?.data?.detail || 'Could not acknowledge this complaint'); } finally { setBusy(null); } };

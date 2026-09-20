@@ -10,7 +10,7 @@ const Complaints: React.FC = () => {
 
   useEffect(() => {
     complaintApi.list()
-      .then(items => setComplaints(items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())))
+      .then(items => setComplaints(items.sort((a: Complaint, b: Complaint) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())))
       .finally(() => setLoading(false));
   }, []);
 
