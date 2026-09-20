@@ -47,7 +47,19 @@ Public users create map-based civic reports with Before evidence. MCC administra
 3. `The worker acknowledges the assignment and uploads an After photo.`
 4. `Gemini returns a visual result and score, visible to the citizen, worker, and MCC.`
 
-**Screenshots:** `<2–4 images under docs/images/, each < 1 MB>`
+**Screenshots:**
+
+| Landing page | Public reporting dashboard |
+|---|---|
+| ![MysuruDrishti landing page](./docs/images/landing-page.png) | ![Public dashboard with map-based complaint reporting](./docs/images/public-dashboard.png) |
+
+| AI evidence review | Worker assigned-area dashboard |
+|---|---|
+| ![Before and After evidence with Gemini AI result](./docs/images/ai-verification.png) | ![Worker dashboard with allotted area and assigned complaints](./docs/images/worker-dashboard.png) |
+
+| MCC map allocation | MCC complaint overview |
+|---|---|
+| ![MCC map for worker-area allocation and live complaint markers](./docs/images/mcc-map-allocation.png) | ![MCC civic complaint list with status tracking](./docs/images/mcc-complaint-list.png) |
 
 ## 4. Architecture
 
