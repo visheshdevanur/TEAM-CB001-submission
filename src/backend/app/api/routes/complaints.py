@@ -231,15 +231,11 @@ async def upload_evidence(
         background_tasks.add_task(process_video_background, id, evidence.id, file_path)
 
     if user and user.role == "WORKER" and evidence_data.type == "AFTER" and not is_video:
-        async def run_ai_verification():
-            from app.db.database import AsyncSessionLocal
-            from app.services.verification_service import verification_service
-            async with AsyncSessionLocal() as verification_db:
-                try:
-                    await verification_service.run_verification(verification_db, id)
-                except Exception as error:
-                    print(f"Automatic verification failed for complaint {id}: {error}")
-        background_tasks.add_task(run_ai_verification)
+        # Run in the request so the worker sees a real success or failure rather
+        # than a silent background-task error. The comparison is persisted before
+        # the UI reloads its complaint detail.
+        from app.services.verification_service import verification_service
+        await verification_service.run_verification(db, id)
 
     return evidence
 
