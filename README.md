@@ -86,8 +86,21 @@ cd frontend && npm install && npm run dev
 ## 8. Known Limitations
 
 - The MVP needs an active network connection; offline queueing is planned but not implemented.
-- Gemini API quota or availability can delay a visual result; the product exposes human review instead of fabricating a result.
+- Gemini API quota or availability can delay a visual result; the app shows that the assessment is unavailable rather than fabricating a score.
+- Worker-area boundaries are manually drawn MCC allocation zones, not official government GIS boundaries.
+- Device location and address lookup depend on browser permissions and third-party mapping services.
 - City-scale routing needs spatial indexes and stronger audit/security controls.
+
+### Future Implementation Plan
+
+| Current limitation | Planned solution |
+|---|---|
+| Internet is required to file a complaint | Add a PWA offline queue that saves the report, images, and selected location locally, then retries securely when the device reconnects. |
+| GPS permissions or accuracy can be limited | Keep manual map placement, add a clearer accuracy indicator, and let the resident adjust the pin before submission. |
+| Manually drawn service areas are approximate | Import verified MCC/KGIS ward and service-boundary data, with versioned boundary updates and an escalation queue for border cases. |
+| Gemini can be unavailable or receive unclear evidence | Add retry/backoff handling, photo-quality checks before upload, a status message for the user, and an MCC escalation queue for unavailable assessments. |
+| Images are stored with application data | Move evidence files to private object storage with signed access URLs, retention rules, compression, and deletion controls. |
+| Application-side routing will not scale indefinitely | Use PostGIS geography indexes for point-in-polygon queries, background queues for AI assessments, audit trails, and role-based access controls. |
 
 ➡️ Full list, edge cases and scaling roadmap: **[docs/limitations.md](./docs/limitations.md)**
 
