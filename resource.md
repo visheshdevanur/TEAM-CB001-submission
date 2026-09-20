@@ -104,13 +104,11 @@ Paste the first 16 characters.
 
 ## 6. Quick Reviewer Path (≤ 3 minutes)
 
-<!-- Tell a reviewer exactly what to click to see your core value. Keep it to 3–5 steps. -->
-
-1. `<Open the live URL and log in as Citizen>`
-2. `<Report a blocked drain at the pre-filled boundary location>`
-3. `<Observe the routing decision + confidence score>`
-4. `<Log in as Staff → see it in the panchayat queue → mark resolved>`
-5. `<Open the public ward map → status now shows Resolved>`
+1. Open the [live URL](https://team-cb-001-submission.vercel.app/) and log in as the Public user.
+2. Select an issue category, choose a Mysuru location on the map, and submit a Before photo.
+3. Log in as MCC administrator, create or select a worker, and allot a map area containing the complaint.
+4. Log in as that worker, open the assigned complaint, and upload an After photo.
+5. Open the complaint from the Public or MCC dashboard to view Gemini's Before/After score, resolution result, and notifications.
 
 ---
 
