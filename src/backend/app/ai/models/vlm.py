@@ -121,12 +121,25 @@ Return exactly one JSON object with this shape and no markdown:
             print(f"VLM CRITICAL ERROR: {str(e)}")
             import traceback
             traceback.print_exc()
-            if "RESOURCE_EXHAUSTED" in str(e) or "429" in str(e):
+            error_text = str(e).lower()
+            if "resource_exhausted" in error_text or "429" in error_text:
                 return self._unavailable_response(
                     "Gemini’s current image-analysis quota has been reached. This complaint is queued for AI review when the quota is available again."
                 )
+            if "401" in error_text or "unauthenticated" in error_text or "api key not valid" in error_text or "invalid api key" in error_text:
+                return self._unavailable_response(
+                    "Gemini rejected the backend API key. Replace GEMINI_API_KEY in Render with an active key from Google AI Studio, then redeploy."
+                )
+            if "403" in error_text or "permission_denied" in error_text or "permission denied" in error_text:
+                return self._unavailable_response(
+                    "The Gemini key is not permitted to use this model. In Google AI Studio, verify the project, key restrictions, billing, and model access."
+                )
+            if "404" in error_text or "not found" in error_text or "not supported" in error_text:
+                return self._unavailable_response(
+                    f"The configured Gemini model ({settings.GEMINI_MODEL}) is unavailable for this key. Set GEMINI_MODEL to a model available in Google AI Studio and redeploy."
+                )
             return self._unavailable_response(
-                "Gemini image analysis did not complete. Check the backend GEMINI_API_KEY, Gemini model, and quota configuration."
+                "Gemini image analysis did not complete. Open the Render service logs and look for ‘VLM CRITICAL ERROR’ to identify the provider response."
             )
 
     def _parse_response(self, text: str) -> dict:
