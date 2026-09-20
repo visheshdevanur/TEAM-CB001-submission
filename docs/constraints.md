@@ -2,15 +2,15 @@
 
 [← Back to README](../README.md)
 
-> Status is deliberately honest: ✅ handled in the MVP · ⚠️ partially handled · ❌ not implemented. Video timestamps will be added after the final recording.
+> Status is deliberately honest: ✅ handled in the MVP · ⚠️ partially handled · ❌ not implemented. Video references below use the final recorded chapter ranges.
 
 | # | Constraint | Status | Video |
 |---|---|---|---|
-| 1 | Fake, spam and harassment reports | ⚠️ Partial | `TBD` |
-| 2 | Unclear jurisdiction | ⚠️ Partial | `TBD` |
-| 3 | Prioritisation beyond "most votes" | ❌ Not implemented | `TBD` |
-| 4 | Bad input: duplicate, fake photo, wrong location, abuse | ⚠️ Partial | `TBD` |
-| 5 | Works without internet | ❌ Not implemented | `TBD` |
+| 1 | Fake, spam and harassment reports | ⚠️ Partial | `08:05–08:32` — Scale, limitations, and AI disclosure |
+| 2 | Unclear jurisdiction | ⚠️ Partial | `01:17–02:21` — MCC administrator dashboard and worker-area allocation |
+| 3 | Prioritisation beyond "most votes" | ❌ Not implemented | `07:28–08:04` — Decision and trade-offs |
+| 4 | Bad input: duplicate, fake photo, wrong location, abuse | ⚠️ Partial | `03:30–04:25` — AI result and notifications |
+| 5 | Works without internet | ❌ Not implemented | `08:05–08:32` — Scale, limitations, and AI disclosure |
 
 ---
 
