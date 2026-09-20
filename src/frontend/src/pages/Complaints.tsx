@@ -10,7 +10,7 @@ const Complaints: React.FC = () => {
 
   useEffect(() => {
     complaintApi.list()
-      .then(setComplaints)
+      .then(items => setComplaints(items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())))
       .finally(() => setLoading(false));
   }, []);
 
@@ -69,7 +69,7 @@ const Complaints: React.FC = () => {
                   </td>
                   <td className="p-4 text-sm text-slate-500">
                     <div className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" /> {new Date(c.created_at).toLocaleDateString()}
+                      <Calendar className="w-3 h-3" /> {new Date(c.created_at).toLocaleString()}
                     </div>
                   </td>
                   <td className="p-4">

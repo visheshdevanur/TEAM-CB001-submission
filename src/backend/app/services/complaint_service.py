@@ -23,7 +23,7 @@ class ComplaintService:
 
     async def list_complaints(self, db: AsyncSession):
         from sqlalchemy import select
-        result = await db.execute(select(Complaint))
+        result = await db.execute(select(Complaint).order_by(Complaint.created_at.desc()))
         return result.scalars().all()
 
 class EvidenceService:

@@ -64,14 +64,14 @@ async def create_complaint(
 async def my_complaints(db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
     if user.role != "PUBLIC":
         raise HTTPException(403, "Public account required")
-    result = await db.execute(select(Complaint).where(Complaint.created_by == user.id))
+    result = await db.execute(select(Complaint).where(Complaint.created_by == user.id).order_by(Complaint.created_at.desc()))
     return result.scalars().all()
 
 @router.get("/worker/inbox", response_model=List[ComplaintResponse])
 async def worker_inbox(db: AsyncSession = Depends(get_db), user: User = Depends(current_user)):
     if user.role != "WORKER":
         raise HTTPException(403, "Worker account required")
-    result = await db.execute(select(Complaint).where(Complaint.assigned_worker_id == user.id))
+    result = await db.execute(select(Complaint).where(Complaint.assigned_worker_id == user.id).order_by(Complaint.created_at.desc()))
     return result.scalars().all()
 
 @router.get("/workers/{worker_id}/complaints")
