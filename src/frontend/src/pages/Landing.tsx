@@ -20,7 +20,6 @@ const Landing: React.FC = () => (
         <span><span className="block text-[10px] font-bold tracking-[0.18em] text-slate-400">MYSURU CITY CORPORATION</span><span className="text-base font-bold tracking-tight">Mysuru<span className="text-blue-400">Drishti</span></span></span>
       </Link>
       <div className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
-        <a href="#home" className="text-white">Home</a><a href="#login" className="hover:text-cyan-200">Login</a><a href="#about" className="hover:text-cyan-200">About</a><a href="#contact" className="hover:text-cyan-200">Contact</a>
       </div>
       <Link to="/access/public" className="inline-flex items-center gap-2 rounded-xl border border-cyan-300/30 bg-blue-500 px-3 py-2 text-sm font-semibold shadow-lg shadow-blue-500/25 transition hover:-translate-y-0.5 hover:bg-blue-400 md:px-4">Citizen Portal <ArrowRight className="h-4 w-4" /></Link>
     </nav>
