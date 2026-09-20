@@ -9,9 +9,32 @@ from app.ai.scoring.evidence_score import scoring_engine, EvidenceVector
 from app.ai.models.vlm import vlm_assistant, VLMExplanationRequest
 from app.storage.file_storage import storage_service
 import cv2
+from pathlib import Path
+from tempfile import gettempdir
 from typing import Dict, Any, Optional, List
 
 class VerificationService:
+    @staticmethod
+    def _analysis_image_path(evidence: Evidence) -> str:
+        """Return a readable local image path, restoring durable DB evidence if needed.
+
+        Render's local uploads directory is ephemeral and disappears on a deploy.
+        Evidence bytes are also stored in PostgreSQL, so recreate a short-lived local
+        copy for OpenCV and Gemini whenever the original upload file has gone away.
+        """
+        legacy_path = Path(storage_service.get_path(evidence.file_path))
+        if legacy_path.is_file():
+            return str(legacy_path)
+        if not evidence.file_data:
+            raise ValueError("The stored evidence image is unavailable. Please upload the photo again.")
+
+        suffix = Path(evidence.file_path).suffix or ".jpg"
+        cache_dir = Path(gettempdir()) / "mysurudrishti-ai-evidence"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        restored_path = cache_dir / f"evidence-{evidence.id}{suffix}"
+        restored_path.write_bytes(evidence.file_data)
+        return str(restored_path)
+
     async def run_verification(self, db: AsyncSession, complaint_id: int) -> Comparison:
         # 1. Load Complaint
         complaint = await db.get(Complaint, complaint_id)
@@ -33,13 +56,13 @@ class VerificationService:
             raise ValueError("Insufficient evidence: both BEFORE and AFTER evidence are required for verification.")
 
         # 3. Geometric Alignment
-        before_path = storage_service.get_path(before_ev.file_path)
-        after_path = storage_service.get_path(after_ev.file_path)
+        before_path = self._analysis_image_path(before_ev)
+        after_path = self._analysis_image_path(after_ev)
         img_before = cv2.imread(before_path)
         img_after = cv2.imread(after_path)
 
         if img_before is None or img_after is None:
-            raise ValueError(f"Could not read image files. Before: {before_ev.file_path}, After: {after_ev.file_path}")
+            raise ValueError("The uploaded evidence files could not be read. Please upload clear JPEG or PNG photos and try again.")
 
         aligned_img, alignment_score, success = homography_aligner.align(img_before, img_after)
 
