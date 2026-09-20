@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     SAM2_MODEL_PATH: str = os.getenv("SAM2_MODEL_PATH", "sam2_hiera_tiny.pt")
     VLM_MODEL: str = os.getenv("VLM_MODEL", "Qwen2.5-VL-7B-Instruct")
     GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY")
+    # Keep the live visual-review model configurable in hosting environments.
+    # Gemini 2.5 Flash accepts image inputs and structured JSON output.
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 
     AI_MODE: str = os.getenv("AI_MODE", "demo") # demo, cpu, gpu

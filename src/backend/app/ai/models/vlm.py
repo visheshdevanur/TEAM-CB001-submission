@@ -26,25 +26,27 @@ class VLMExplanationResponse(BaseModel):
 
 class VLMReasoningAssistant:
     """
-    Integrates Google Gemini 1.5 Flash via the new google-genai SDK
+    Integrates Gemini via the google-genai SDK
     to provide real visual reasoning of civic resolution evidence.
     """
     def __init__(self):
         self.api_key = settings.GEMINI_API_KEY
         if not self.api_key:
-            print("Warning: GEMINI_API_KEY not found. Image comparison will require human review.")
+            print("Warning: GEMINI_API_KEY not found. Live image comparison is unavailable.")
             self.client = None
         else:
             try:
                 self.client = genai.Client(api_key=self.api_key)
-                print("Initialized Gemini 1.5 Flash via google-genai SDK for real visual reasoning.")
+                print(f"Initialized {settings.GEMINI_MODEL} via google-genai SDK for live visual reasoning.")
             except Exception as e:
                 print(f"Error initializing Gemini client: {e}")
                 self.client = None
 
     def generate_explanation(self, request: VLMExplanationRequest) -> VLMExplanationResponse:
         if not self.client:
-            return self._unavailable_response()
+            return self._unavailable_response(
+                "Live AI review is unavailable because GEMINI_API_KEY is not configured on the backend."
+            )
 
         try:
             print(f"VLM: Processing complaint {request.complaint_id}...")
@@ -87,7 +89,7 @@ Return exactly one JSON object with this shape and no markdown:
             for attempt in range(3):
                 try:
                     response = self.client.models.generate_content(
-                        model='gemini-3.6-flash',
+                        model=settings.GEMINI_MODEL,
                         contents=[prompt, img_before.convert("RGB"), img_after.convert("RGB")],
                         config=types.GenerateContentConfig(response_mime_type="application/json")
                     )
@@ -123,7 +125,9 @@ Return exactly one JSON object with this shape and no markdown:
                 return self._unavailable_response(
                     "Gemini’s current image-analysis quota has been reached. This complaint is queued for AI review when the quota is available again."
                 )
-            return self._unavailable_response()
+            return self._unavailable_response(
+                "Gemini image analysis did not complete. Check the backend GEMINI_API_KEY, Gemini model, and quota configuration."
+            )
 
     def _parse_response(self, text: str) -> dict:
         clean_text = re.sub(r"^```(?:json)?|```$", "", text.strip(), flags=re.MULTILINE).strip()
