@@ -61,7 +61,7 @@ HOW TO FILL THIS FILE
 
 | # | Artifact | Google Drive Link | File Name | SHA-256 (first 16 chars) |
 |---|---|---|---|---|
-| 1 | [Pitch + Code Walkthrough Video](./resource-templates/video-guide.md) (≤ 10 min, MP4) | `<https://drive.google.com/file/d/.../view>` | `<TeamID>_video.mp4` | `<a1b2c3d4e5f60718>` |
+| 1 | [Pitch + Code Walkthrough Video](./resource-templates/video-guide.md) (≤ 10 min, MP4) | [Watch video](https://drive.google.com/file/d/17A10rD989kY1uZjEuntCyrd34fr2aQ5z/view) | `TEAM-CB001.mp4` | `EA8DBEC6DB7D84AA` |
 | 2 | [Decision Log](./resource-templates/decision-log-template.md) (1 page, PDF) | [View PDF](https://drive.google.com/file/d/1VvMnlGeIiP1QGn2Zp-oiJGjbtbpaafk3/view?usp=sharing) | `CB001_decision-log.pdf` | `c832feb0c1baf380` |
 | 3 | [Presentation](./resource-templates/presentation-template.md) (≤ 10 slides, PDF) | [View PDF](https://drive.google.com/file/d/1Af--PRQRWfAFzsooZk4Kqg1V28zBq4BV/view?usp=sharing) | `TEAM-CB001_presentation.pdf` | `18b5ba6905f0f225` |
 
@@ -76,16 +76,16 @@ Paste the first 16 characters.
 
 | Timestamp | Section |
 |---|---|
-| `00:00` | Part 1: Problem & target users |
-| `00:40` | Part 1: Live demo, core flow |
-| `01:50` | Part 1: Bad-input handling |
-| `02:30` | Part 1: Offline / airplane mode |
-| `03:00` | Part 2: Architecture overview |
-| `04:30` | Part 2: Data model & APIs |
-| `05:30` | Part 2: Key code walkthrough |
-| `07:30` | Part 2: Decisions & trade-offs |
-| `08:30` | Part 2: Scaling & limitations |
-| `09:15` | Part 2: AI usage (see [ai.md](./ai.md)) |
+| `00:00` | Introduction |
+| `00:29` | Public dashboard |
+| `01:17` | MCC administrator dashboard |
+| `02:24` | Worker dashboard |
+| `03:30` | AI result and notifications |
+| `04:26` | Architecture and data model |
+| `05:39` | Routing, API endpoints, AI verification, and image persistence |
+| `07:28` | Decision and trade-offs |
+| `08:05` | Scale, limitations, and AI disclosure (see [ai.md](./ai.md)) |
+| `08:32` | Conclusion |
 
 ---
 
@@ -114,11 +114,11 @@ Paste the first 16 characters.
 
 ## 7. Declaration
 
-- [ ] All Drive links open in an incognito window with **Viewer** access (no "Request access").
-- [ ] The video is one continuous recording, ≤ 10 minutes, Part 1 then Part 2.
-- [ ] The decision log is one page and written by us in our own words.
-- [ ] All AI tools used (development and in-product) are disclosed in [`ai.md`](./ai.md).
-- [ ] No code specific to this challenge was written before 18 Sept 2026, 00:00 IST.
-- [ ] We will not modify or replace any linked file after 20 Sept 2026, 23:59 IST.
+- [x] All Drive links open in an incognito window with **Viewer** access (no "Request access").
+- [x] The video is one continuous recording, ≤ 10 minutes, Part 1 then Part 2.
+- [x] The decision log is one page and written by us in our own words.
+- [x] All AI tools used (development and in-product) are disclosed in [`ai.md`](./ai.md).
+- [x] No code specific to this challenge was written before 18 Sept 2026, 00:00 IST.
+- [x] We will not modify or replace any linked file after 20 Sept 2026, 23:59 IST.
 
-**Submitted by:** `Bhavish S` · **Date/Time (IST):** `<20-09-2026 21:40>`
+**Submitted by:** `Bhavish S` · **Date/Time (IST):** `20-09-2026 23:00`
