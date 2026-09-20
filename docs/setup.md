@@ -2,59 +2,79 @@
 
 [← Back to README](../README.md)
 
-<!-- A reviewer should get this running in under 10 minutes if the live link is down. -->
+> The deployed MVP is available from the [live URL](https://team-cb-001-submission.vercel.app/). These instructions are for local development when the live service is unavailable.
 
 ## Prerequisites
 
 | Tool | Version |
 |---|---|
-| `<Node.js / Python / Docker>` | `<20.x / 3.11 / 24+>` |
+| Node.js | `20.x` or later |
+| Python | `3.11` recommended |
+| PostgreSQL | `15` or later |
+| Google Gemini API key | Required for live visual assessment |
 
 ## 1. Clone
 
 ```bash
-git clone <repo-url>
-cd <repo>
+git clone https://github.com/visheshdevanur/TEAM-CB001-submission.git
+cd TEAM-CB001-submission
 ```
 
 ## 2. Environment Variables
 
-```bash
-cp .env.example .env
+Create the backend environment file from the provided example:
+
+```powershell
+Copy-Item src/.env.example src/.env
 ```
 
-| Variable | Required | Example | Purpose |
-|---|---|---|---|
-| `DATABASE_URL` | Yes | `<...>` | `<...>` |
-| `<API_KEY>` | `<No>` | `<...>` | `<...>` |
+| Variable | Required | Purpose |
+|---|---|---|
+| `DATABASE_URL` | Yes | PostgreSQL connection string, for example `postgresql://user:password@localhost:5432/beforeafterai`. |
+| `GEMINI_API_KEY` | Yes for AI review | Server-side Gemini key; never expose it in the frontend. |
+| `AUTH_SECRET` | Yes | Long random secret used for authentication tokens. |
+| `MCC_ADMIN_EMAIL` | Yes | Email for the initial MCC administrator account. |
+| `MCC_ADMIN_PASSWORD` | Yes | Password for the initial MCC administrator account. |
+| `UPLOAD_DIR` | No | Local temporary upload folder; evidence bytes are also persisted with the evidence record. |
 
-> Never commit real secrets. Commit only `.env.example`.
+> Never commit `src/.env` or a real Gemini key. Commit only `src/.env.example`.
 
-## 3. Install & Seed Demo Data
+## 3. Database and Backend
 
-```bash
-<install command>
-<migration command>
-<seed command>          # loads <N> sample complaints across <N> wards
+Create a local PostgreSQL database named `beforeafterai`, then install Python dependencies from the repository root:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r src/requirements.txt
+cd src/backend
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-## 4. Run
+On first start, the API creates its tables and creates the MCC administrator from `MCC_ADMIN_EMAIL` and `MCC_ADMIN_PASSWORD` when those variables are set. There is no separate migration or seed command required for the hackathon MVP.
 
-```bash
-<run command>
+## 4. Frontend
+
+In a second terminal from the repository root:
+
+```powershell
+cd src/frontend
+npm install
+$env:VITE_API_BASE = "http://localhost:8000"
+npm run dev
 ```
 
-Open `http://localhost:<port>`. Test accounts are listed in [resource.md](../resource.md#5-live-mvp).
+Open the Vite URL shown in the terminal, normally `http://localhost:5176`. Create a public account, create a worker from the MCC dashboard, and allot a worker area to exercise the complete flow.
 
-## Testing Offline Mode
+## Offline Mode
 
-1. `<Open the app and log in>`
-2. `<Chrome DevTools → Network → Offline, or phone airplane mode>`
-3. `<File a complaint → it shows "queued">`
-4. `<Go back online → it syncs and shows "submitted">`
+Offline complaint submission and automatic sync are not implemented in this MVP. Keep the browser online for authentication, map/address lookup, uploads, API requests, and Gemini assessment.
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
-| `<Port already in use>` | `<...>` |
+| Backend cannot connect to PostgreSQL | Confirm PostgreSQL is running and `DATABASE_URL` in `src/.env` is correct. |
+| Gemini result is unavailable | Confirm `GEMINI_API_KEY`, network access, and provider quota; upload clear category-matching Before/After images. |
+| Browser blocks the API request | Use `http://localhost:5176` for local development or add the frontend origin to FastAPI CORS settings. |
+| Port is already in use | Stop the existing process or use another port, then update `VITE_API_BASE` to match the backend port. |

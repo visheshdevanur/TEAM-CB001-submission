@@ -129,4 +129,4 @@ cd frontend && npm install && npm run dev
 
 ## License
 
-`<MIT / Apache-2.0 / None>`. You retain full ownership of your code.
+`None`. The team retains full ownership of this hackathon submission.

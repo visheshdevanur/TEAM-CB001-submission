@@ -2,50 +2,50 @@
 
 [← Back to README](../README.md)
 
-<!-- The problem statement names five constraints that decide whether a solution would hold up
-in Mysuru. Be honest: ✅ handled · ⚠️ partial · ❌ not yet. Timestamps point to the video. -->
+> Status is deliberately honest: ✅ handled in the MVP · ⚠️ partially handled · ❌ not implemented. Video timestamps will be added after the final recording.
 
 | # | Constraint | Status | Video |
 |---|---|---|---|
-| 1 | Fake, spam and harassment reports | `<✅/⚠️/❌>` | `<mm:ss>` |
-| 2 | Unclear jurisdiction | `<...>` | `<...>` |
-| 3 | Prioritisation beyond "most votes" | `<...>` | `<...>` |
-| 4 | Bad input (duplicate, fake photo, wrong location, abuse) | `<...>` | `<...>` |
-| 5 | Works without internet | `<...>` | `<...>` |
+| 1 | Fake, spam and harassment reports | ⚠️ Partial | `TBD` |
+| 2 | Unclear jurisdiction | ⚠️ Partial | `TBD` |
+| 3 | Prioritisation beyond "most votes" | ❌ Not implemented | `TBD` |
+| 4 | Bad input: duplicate, fake photo, wrong location, abuse | ⚠️ Partial | `TBD` |
+| 5 | Works without internet | ❌ Not implemented | `TBD` |
 
 ---
 
 ## 1. Fake, spam and harassment reports
 
-- **Approach:** `<signals used, thresholds, human review?>`
-- **Anonymity trade-off:** `<how you keep honest anonymous reports while limiting abuse>`
-- **Code:** `src/<...>`
+- **Approach:** Public users must sign in before filing and evidence is tied to the reporter's account. MCC can see complaint status and worker assignment rather than accepting anonymous closures.
+- **Current limitation:** There is no rate limit, abuse classifier, reporter reputation system, or content-moderation queue yet.
+- **Code:** `src/backend/app/api/routes/auth.py`, `src/backend/app/api/routes/complaints.py`
 
 ## 2. Unclear jurisdiction
 
-- **Approach:** `<boundary data, buffer zones, confidence score, shared queue, escalation>`
-- **What happens in a boundary case:** `<...>`
-- **Code:** `src/<...>`
+- **Approach:** MCC draws a named, non-overlapping polygon for each worker. A complaint is assigned only when its selected point lies inside that polygon.
+- **What happens in a boundary/outside case:** The complaint remains `UNASSIGNED` for MCC review. MCC can draw, change, or remove an allocation; saving an area backfills older unassigned reports inside it.
+- **Current limitation:** These are manually created allocation zones, not official MCC/KGIS boundaries.
+- **Code:** `src/backend/app/api/routes/areas.py`
 
 ## 3. Prioritisation
 
-- **Formula / rules:** `<e.g. severity × sensitive-location weight × unique reporters × age>`
-- **Why not simply "most votes":** `<...>`
-- **Code:** `src/<...>`
+- **Current MVP behavior:** The MCC dashboard shows live totals, verification outcomes, recurring-location count, and reports that have not been acknowledged by a worker after three days.
+- **Why not simply "most votes":** The MVP does not use vote counts or claim to have a production priority formula. A future formula should combine severity, age, recurrence, sensitive-location impact, and service-level breach.
+- **Code:** `src/backend/app/api/routes/complaints.py`
 
 ## 4. Bad input
 
-| Input | What our system does |
+| Input | What the MVP does |
 |---|---|
-| Duplicate report | `<...>` |
-| Fake / unrelated photo | `<...>` |
-| Wrong or impossible location | `<...>` |
-| Abusive message | `<...>` |
-| `<Anything else you tested>` | `<...>` |
+| Duplicate report | No automatic duplicate merge yet; MCC can see recurring location counts. |
+| Fake / unrelated photo | Gemini checks category and Before/After evidence when an After photo is uploaded. A category mismatch or unclear result does not produce a fabricated resolution score. |
+| Wrong or impossible location | The resident can place or adjust a map pin; reverse geocoding fills the address. Device location is optional because permissions and GPS may fail. |
+| Abusive message | Basic complaint data is stored, but there is no automated text moderation yet. |
+| Oversized upload | Evidence upload rejects files larger than 25 MB. |
 
 ## 5. Offline operation
 
-- **What works offline:** `<...>`
-- **How it syncs:** `<queue, retry, conflict handling>`
-- **What does not work offline:** `<...>`
-- **How to test:** see [setup.md](./setup.md#testing-offline-mode)
+- **What works offline:** No end-to-end complaint workflow is supported offline.
+- **What does not work offline:** Authentication, map tiles/geocoding, uploads, PostgreSQL API calls, notifications, and Gemini assessment all require connectivity.
+- **Future approach:** Add a PWA queue, local encrypted draft storage, background sync, offline map packs, and an on-device or locally hosted visual model where appropriate.
+- **How to test the real MVP:** Keep the device online; see [setup.md](./setup.md).
