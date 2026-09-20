@@ -19,10 +19,10 @@ If you used no AI at all, say so explicitly in the Summary and delete the rest.
 
 | Question | Answer |
 |---|---|
-| Did we use AI tools during development? | `<Yes / No>` |
-| Does our product use AI/ML at runtime? | `<Yes / No>` |
-| Roughly how much of the code was AI-assisted? | `<e.g. ~40% of frontend, ~15% of backend, 0% of routing logic>` |
-| Can every team member explain the AI-assisted code? | `<Yes>` |
+| Did we use AI tools during development? | `Yes` |
+| Does our product use AI/ML at runtime? | `Yes` |
+| Roughly how much of the code was AI-assisted? | `Approximately 70% overall` |
+| Can every team member explain the AI-assisted code? | `Yes` |
 
 ---
 
@@ -30,18 +30,17 @@ If you used no AI at all, say so explicitly in the Summary and delete the rest.
 
 | Tool | Model / plan | Used by | What we used it for |
 |---|---|---|---|
-| `<ChatGPT>` | `<GPT-x, free>` | `<@handle>` | `<Debugging CORS errors, regex for phone validation>` |
-| `<GitHub Copilot>` | `<...>` | `<@handle, @handle>` | `<Autocomplete in React components>` |
-| `<Cursor / Claude / v0 / ...>` | `<...>` | `<...>` | `<...>` |
+| `OpenAI Codex` | `Codex coding agent` | `All team members` | `UI implementation, backend/API integration, debugging, deployment troubleshooting, documentation, and test support.` |
+| `ChatGPT` | `ChatGPT` | `All team members` | `Requirement clarification, workflow design, technical explanation, and review of implementation options.` |
 
 ## 2. Where AI Helped in the Codebase
 
 | Area / file | Level of AI help | What a human did |
 |---|---|---|
-| `src/<frontend/components/>` | `<High: scaffolded by v0>` | `<Rewrote state handling, added offline queue>` |
-| `src/<api/routes.py>` | `<Medium: Copilot suggestions>` | `<Designed endpoints, wrote validation>` |
-| `src/<routing/engine.py>` | `<None>` | `<Written by hand, core logic>` |
-| `<README / docs>` | `<...>` | `<...>` |
+| `src/frontend/` | `High` | `Team members set the product flow, checked UI behavior, tested role-specific dashboards, and corrected integration issues.` |
+| `src/backend/app/` | `Medium to high` | `Team members configured deployment, verified API behavior, environment variables, authentication, and database-backed workflows.` |
+| `Worker-area routing and operational rules` | `Medium` | `The team chose the polygon-allocation workflow, reviewed the routing behavior, and tested it using Mysuru locations.` |
+| `README.md, resource.md, and docs/` | `High` | `The team supplied factual project details, reviewed claims, and approved the final documentation.` |
 
 **Commit convention (optional, recommended):** commits containing substantial AI-generated code are tagged `[ai]` in the message, e.g. `feat: ward status page [ai]`.
 
@@ -51,14 +50,13 @@ If you used no AI at all, say so explicitly in the Summary and delete the rest.
 
 | Model / API | What it does in our product | Hosted where | Trained / fine-tuned by us? |
 |---|---|---|---|
-| `<YOLOv8n>` | `<Detects overflowing bins in photos>` | `<On server / on device>` | `<Fine-tuned on 300 labelled images>` |
-| `<LLM API>` | `<Classifies complaint text into issue types>` | `<Provider API>` | `<No, prompt only>` |
+| `Google Gemini API` | `Reviews the selected complaint category with the Before and After evidence images, then returns a score and outcome explaining whether the visible issue appears resolved.` | `Google Gemini API, called by the FastAPI backend` | `No; prompt-based use of the provider model.` |
 
-- **Accuracy we measured:** `<e.g. 82% precision on 50 held-out images>` (or "not measured yet")
-- **What happens when the model is wrong:** `<fallback, human review, confidence threshold>`
-- **Does it work offline?** `<...>`
-- **Citizen data sent to third parties:** `<none / what, and why>`
-- **Cost at city scale:** `<rough estimate, or "unknown">`
+- **Accuracy we measured:** `Not formally measured yet. The MVP was manually tested using representative Before/After complaint images.`
+- **What happens when the model is wrong:** `The score is shown with Gemini's evidence explanation. If assessment is unavailable, unclear, or category-mismatched, the application does not fabricate a score and asks for clearer/new evidence.`
+- **Does it work offline?** `No. Gemini assessment requires an internet connection and an available API.`
+- **Citizen data sent to third parties:** `When assessment is requested, the selected issue category and the resident's Before image plus worker's After image are sent to Google Gemini solely for visual assessment.`
+- **Cost at city scale:** `Not measured yet; production rollout would require quota monitoring, retry limits, and a budget for visual-model requests.`
 
 ## 4. Key Prompts (optional, max 5)
 
@@ -66,20 +64,24 @@ If you used no AI at all, say so explicitly in the Summary and delete the rest.
 
 | # | Prompt (short) | What we kept | What we changed or rejected |
 |---|---|---|---|
-| 1 | `<"Suggest a schema for complaints with geo-dedup">` | `<Table layout>` | `<Replaced lat/lng floats with PostGIS geography>` |
+| 1 | `Design a role-based civic complaint workflow with public, worker, and MCC views.` | `Separate dashboards and clear role-specific actions.` | `We kept our own workflow rules and assignment behavior.` |
+| 2 | `Suggest an approach for comparing Before and After civic-issue photos.` | `Gemini visual assessment with a score and explanation.` | `We rejected fabricated image metrics and require Gemini output for the final assessment.` |
+| 3 | `Help diagnose deployment and browser CORS failures.` | `Configuration and debugging guidance.` | `The team tested fixes against the deployed frontend and backend.` |
 
 ## 5. How We Verified AI Output
 
-- `<e.g. Every AI-generated function was run against our seed data before merging>`
-- `<e.g. Rejected suggestions that stored photos in the database as base64>`
-- `<Example of a bug an AI tool introduced and how we caught it>`
+- We tested public, worker, and MCC workflows with sample complaints before using them in the demo.
+- We tested whether an uploaded Before and After image can be displayed to each permitted role and whether the Gemini result is visible after assessment.
+- We caught and corrected deployment issues including missing backend dependencies and browser CORS configuration through local and deployed testing.
+- We rejected any UI or documentation claim that did not match the implemented workflow.
 
 ## 6. What We Deliberately Did *Not* Use AI For
 
-- `<e.g. The Decision Log — written by the team in our own words>`
-- `<e.g. The jurisdiction routing rules>`
+- The team made the final product, role, and worker-area allocation decisions.
+- The team reviewed and tested the final code and deployment configuration.
+- We did not train or fine-tune an image model; Gemini is used as a provider API at runtime.
 
 ---
 
 **Declaration:** We confirm this disclosure is complete, and every team member can explain the code listed above.
-**Signed:** `<Team Leader name>` on behalf of `<Team Name>` · `<date>`
+**Signed:** `Bhavish S` on behalf of `Code Breakers (CB001)` · `20 September 2026`
